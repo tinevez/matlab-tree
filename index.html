@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="@tree : A MATLAB class to represent the tree data structure." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>@tree</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tinevez/matlab-tree">View on GitHub</a>
+
+          <h1 id="project_title">@tree</h1>
+          <h2 id="project_tagline">A MATLAB class to represent the tree data structure.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tinevez/matlab-tree/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tinevez/matlab-tree/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="a-simple-tree-data-structure-in-a-matlab-class" class="anchor" href="#a-simple-tree-data-structure-in-a-matlab-class"><span class="octicon octicon-link"></span></a>A simple tree data structure in a MATLAB class.</h1>
+
+<p>This page serves as a basic documentation or tutorial for the @tree class. We duplicate some of the information that can be found in the help sections of methods, so that you can find almost everything here, in one place.</p>
+
+<p>But here is a short primer: the tree class is simple, and it is not a handle class. It is very simple, so you will find no Node class, no complicated path search, no fancy imports, etc... It is all based on plain MATLAB arrays and cell arrays, with no or extremely small overhead.</p>
+
+<p>Also, it is not inheriting from handle, which means that it is a standard 'per value' object, and cannot be modified or accessed 'per reference'. This generates some apparent weirdness if you are used to the Java counterparts, but also some flexibility, that we detail later.</p>
+
+<p>Each method is normally documented, and you can access its documentation using the classical</p>
+
+<p><code>&gt;&gt; help tree/findpath</code></p>
+
+<p>for instance. These pages add a tutorial that aims at familiarizing yourself with the class as a whole.</p>
+
+<h1>
+<a name="tutorial" class="anchor" href="#tutorial"><span class="octicon octicon-link"></span></a>Tutorial.</h1>
+
+<p>This tutorial is split into several sections, normally independent. It is a good idea however to read them in order:</p>
+
+<ol>
+<li><a href="TreeDemo/TreeDemo_intro.html">Introduction to trees, the tree class, and basic information.</a></li>
+<li><a href="TreeDemo/TreeDemo_creating.html">Creating, modifying and accessing a tree.</a></li>
+<li><a href="TreeDemo/TreeDemo_operators.html">MATLAB operators for trees.</a></li>
+<li><a href="TreeDemo/TreeDemo_special.html">Special trees and methods.</a></li>
+<li><a href="TreeDemo/TreeDemo_searching.html">Searching a tree.</a></li>
+<li><a href="TreeDemo/TreeDemo_traversal.html">Tree traversal.</a></li>
+<li><a href="TreeDemo/TreeDemo_plot.html">Plotting a tree.</a></li>
+</ol><h1>
+<a name="wrapping-up" class="anchor" href="#wrapping-up"><span class="octicon octicon-link"></span></a>Wrapping up.</h1>
+
+<p>This rather long tutorial shows a glimpse of what you can do with the tree class, and hopefully will start you using it for your needs. Do not hesitate to contact me if you see obvious missing functionalities. Here is a list of what could be done extra:</p>
+
+<ul>
+<li>A specialized binary tree class inheriting (or not) from this one.</li>
+<li>A specialized class that is constrained to hold a specific data type and offers the benefits from this constraint.</li>
+<li>Extra recursive methods, in the fashion of recursivecumfun but accumulating or iterating in different directions.</li>
+</ul><p>The tree class has a very small memory overhead, by construction, and should be rather memory efficient. But it was not designed for speed performance: a large number of methods are written using recursion and involve array copying. New, better performing implementations of these methods would be beneficial.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">@tree maintained by <a href="https://github.com/tinevez">tinevez</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
