@@ -1,0 +1,284 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MATLAB operators for trees</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-06-11"><meta name="DC.source" content="TreeDemo_operators.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>MATLAB operators for trees</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">List of implement operators</a></li><li><a href="#7">Calling generic function on nodes content</a></li><li><a href="#9">Misc functions</a></li></ul></div><p>I did my best to stick with the MATLAB touch when designing the <tt>tree</tt> class. As a result, you can use trees as if they were regular MATLAB arrays. Most of the standard operators are implemented, and have their element-wise meaning, with scalar expansion if needed. For instance:</p><pre class="codeinput"><span class="comment">% Grab the duration example tree, which holds only numerical data</span>
+[ lineage, duration ] = tree.example;
+a = (  ( duration .* (100 - duration.^2) ./ 5 ) ) &lt; - duration;
+disp(a.tostring)
+</pre><pre class="codeoutput">                                                                false                                                                
+                         +---------------------------------------+-------------------------+                                         
+                         |                                                                 |                                         
+                       false                                                             false                                       
+            +-----------+------------+                                  +------------------+---------------------+                   
+            |                        |                                  |                                        |                   
+          false                    false                              false                                    false                 
+     +-----+------+           +------+-----+                +-----------+---------+                  +-----------+------+            
+     |            |           |            |                |                     |                  |                  |            
+   true         false       false        true             false                 true               false              false          
+  +--+--+     +--+---+     +--+--+      +--+---+        +--+------+        +-----+------+        +--+---+         +----+------+      
+  |     |     |      |     |     |      |      |        |         |        |            |        |      |         |           |      
+true  true  true   false true  true   false  false    true      false    false        true     true   false     true        true     
+                                                     +--+--+            +--+--+     +--+---+                   +-+---+     +--+--+   
+                                                     |     |            |     |     |      |                   |     |     |     |   
+                                                   true  true         true  true  true   false               false true  true  true  
+</pre><p>Of course, all will be well if the content of all nodes allows these operations. If you have heterogeneous data, there <b>might</b> be errors. If you combine two tree with different structures or node orders, there might be unexpected results. There is no check against pathological operations; we again assume you know what you are doing.</p><h2>List of implement operators<a name="3"></a></h2><p>Here is a brief list of implemented operators, with their common meaning. We assume that <tt>a</tt> is a tree and that <tt>b</tt> is either another tree or a scalar number. All binary operators support scalar expansion.</p><p>
+<table border="5" cellspacing="5">
+<caption>Standard operators</caption>
+<tr><td> <code>a + b</code> </td> <td> Binary addition  </td></tr>
+<tr><td> <code>a - b</code> </td> <td> Binary subtraction </td></tr>
+<tr><td> <code>-a</code>  </td> <td> Unary minus </td></tr>
+<tr><td> <code>+a</code>  </td> <td> Unary plus </td></tr>
+<tr><td> <code>a.*b</code> </td> <td> Element-wise multiplication </td></tr>
+<tr><td> <code>a./b</code> </td> <td> Right element-wise division </td></tr>
+<tr><td> <code>a.\b</code> </td> <td> Left element-wise division </td></tr>
+<tr><td> <code>a.^b</code> </td> <td> Element-wise power </td></tr>
+</table>
+</p><p>
+<table border="5" cellspacing="5">
+<caption>Logical operators</caption>
+<tr><td> <code>a < b</code> </td> <td> Less than </td></tr>
+<tr><td> <code>a > b</code> </td> <td> Greater than </td></tr>
+<tr><td> <code>a <= b</code> </td> <td> Less than or equal to </td></tr>
+<tr><td> <code>a >= b</code> </td> <td> Greater than or equal to </td></tr>
+<tr><td> <code>a ~= b</code> </td> <td> Not equal to </td></tr>
+<tr><td> <code>a == b</code> </td> <td> Equality </td></tr>
+<tr><td> <code>a & b</code> </td> <td> Logical AND </td></tr>
+<tr><td> <code>a | b</code> </td> <td> Logical OR </td></tr>
+<tr><td> <code>xor(a, b)</code> </td> <td> Logical exclusive OR </td></tr>
+<tr><td> <code>~a</code>  </td> <td> Logical NOT </td></tr>
+</table>
+</p><p>
+<table border="5" cellspacing="5">
+<caption>Investigate logical trees</caption>
+<tr><td> <code>any(a)</code>  </td> <td>  True if any node content is a nonzero number </td></tr>
+<tr><td> <code>all(a)</code>  </td> <td>  True if all node content are nonzero numbers </td></tr>
+</table>
+</p><p>Here is a list of operators that are <b>not</b> implemented, because they make sense only for matrices:</p><p>
+<table border="5" cellspacing="5">
+<tr><td> <code>a*b</code> </td> <td> Matrix multiplication </td></tr>
+<tr><td> <code>a/b</code> </td> <td> Matrix right division </td></tr>
+<tr><td> <code>a\b</code> </td> <td> Matrix left division </td></tr>
+<tr><td> <code>a^b</code> </td> <td> Matrix power </td></tr>
+</table>
+</p><p>There are others, such as trigonometric operators, that are not implemented yet, because I did not find a use for them in my work. Should you need them, press me.</p><h2>Calling generic function on nodes content<a name="7"></a></h2><p>Another solution, if you do not find happiness with the above operators, is to call a generic function on the nodes content. There is two methods to do that.</p><p><b><tt>treefun</tt></b> apply a 1-argument function on the content of each node and generate a new tree holding the result. For instance:</p><pre class="codeinput">t = lineage.subtree(19);
+letterCount = t.treefun(@numel);
+disp( [t.tostring letterCount.tostring ] ) <span class="comment">% Count the number of letters in each string of the t tree</span>
+</pre><pre class="codeoutput">                EMS                         3         
+     +-----------+-----+              +-----+--+      
+     |                 |              |        |      
+    MS                 E              2        1      
+  +--+--+        +-----+-----+       ++-+   +--+--+   
+  |     |        |           |       |  |   |     |   
+MS.a  MS.p      E.a         E.p      4  4   3     3   
+              +--+--+     +--+--+          ++-+  ++-+ 
+              |     |     |     |          |  |  |  | 
+            E.al  E.ar  E.pl  E.pr         4  4  4  4 
+</pre><p><b><tt>treefun2</tt></b> does the same, but with two trees and a 2-arguments function:</p><pre class="codeinput">lastLetter = t.treefun2(letterCount, @(a, b) a(b));
+disp(lastLetter.tostring) <span class="comment">% Extract the last letter</span>
+</pre><pre class="codeoutput">        S         
+  +-----+--+      
+  |        |      
+  S        E      
+ ++-+   +--+--+   
+ |  |   |     |   
+ a  p   a     p   
+       ++-+  ++-+ 
+       |  |  |  | 
+       l  r  l  r 
+</pre><h2>Misc functions<a name="9"></a></h2><p>There is also a variety of methods that generate synchronized trees, made to simplify developping using the class:</p><div><ul><li><b><tt>isemptynode</tt></b> return a logical tree where each node is true if the mathcine node in the source true is empty</li></ul></div><p>Back to <a href="../index.html">main page</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% MATLAB operators for trees
+%
+
+%%
+% I did my best to stick with the MATLAB touch when designing the |tree|
+% class. As a result, you can use trees as if they were regular MATLAB
+% arrays. Most of the standard operators are implemented, and have their
+% element-wise meaning, with scalar expansion if needed. For instance:
+
+% Grab the duration example tree, which holds only numerical data
+[ lineage, duration ] = tree.example;
+a = (  ( duration .* (100 - duration.^2) ./ 5 ) ) < - duration;
+disp(a.tostring)
+
+%% 
+% Of course, all will be well if the content of all nodes allows these
+% operations. If you have heterogeneous data, there *might* be errors. If
+% you combine two tree with different structures or node orders, there
+% might be unexpected results. There is no check against pathological
+% operations; we again assume you know what you are doing.
+%
+
+%% List of implement operators
+% Here is a brief list of implemented operators, with their common meaning.
+% We assume that |a| is a tree and that |b| is either another tree or a
+% scalar number. All binary operators support scalar expansion.
+%
+% <html>
+% <table border="5" cellspacing="5">
+% <caption>Standard operators</caption>
+% <tr><td> <code>a + b</code> </td> <td> Binary addition  </td></tr>
+% <tr><td> <code>a - b</code> </td> <td> Binary subtraction </td></tr>
+% <tr><td> <code>-a</code>  </td> <td> Unary minus </td></tr>
+% <tr><td> <code>+a</code>  </td> <td> Unary plus </td></tr>
+% <tr><td> <code>a.*b</code> </td> <td> Element-wise multiplication </td></tr>
+% <tr><td> <code>a./b</code> </td> <td> Right element-wise division </td></tr>
+% <tr><td> <code>a.\b</code> </td> <td> Left element-wise division </td></tr>
+% <tr><td> <code>a.^b</code> </td> <td> Element-wise power </td></tr>
+% </table>
+% </html>
+
+%%
+% <html>
+% <table border="5" cellspacing="5">
+% <caption>Logical operators</caption>
+% <tr><td> <code>a < b</code> </td> <td> Less than </td></tr>
+% <tr><td> <code>a > b</code> </td> <td> Greater than </td></tr>
+% <tr><td> <code>a <= b</code> </td> <td> Less than or equal to </td></tr>
+% <tr><td> <code>a >= b</code> </td> <td> Greater than or equal to </td></tr>
+% <tr><td> <code>a ~= b</code> </td> <td> Not equal to </td></tr>
+% <tr><td> <code>a == b</code> </td> <td> Equality </td></tr>
+% <tr><td> <code>a & b</code> </td> <td> Logical AND </td></tr>
+% <tr><td> <code>a | b</code> </td> <td> Logical OR </td></tr>
+% <tr><td> <code>xor(a, b)</code> </td> <td> Logical exclusive OR </td></tr>
+% <tr><td> <code>~a</code>  </td> <td> Logical NOT </td></tr>
+% </table>
+% </html>
+
+%%
+% <html>
+% <table border="5" cellspacing="5">
+% <caption>Investigate logical trees</caption>
+% <tr><td> <code>any(a)</code>  </td> <td>  True if any node content is a nonzero number </td></tr>
+% <tr><td> <code>all(a)</code>  </td> <td>  True if all node content are nonzero numbers </td></tr>
+% </table>
+% </html>
+% 
+
+%%
+% Here is a list of operators that are *not* implemented, because they make
+% sense only for matrices:
+%
+% <html>
+% <table border="5" cellspacing="5">
+% <tr><td> <code>a*b</code> </td> <td> Matrix multiplication </td></tr>
+% <tr><td> <code>a/b</code> </td> <td> Matrix right division </td></tr>
+% <tr><td> <code>a\b</code> </td> <td> Matrix left division </td></tr>
+% <tr><td> <code>a^b</code> </td> <td> Matrix power </td></tr>
+% </table>
+% </html>
+%
+% There are others, such as trigonometric operators, that are not
+% implemented yet, because I did not find a use for them in my work. Should
+% you need them, press me.
+
+
+
+
+
+
+
+%% Calling generic function on nodes content
+%
+% Another solution, if you do not find happiness with the above operators,
+% is to call a generic function on the nodes content. There is two methods
+% to do that. 
+%
+% *|treefun|* apply a 1-argument function on the content of each node and
+% generate a new tree holding the result. For instance:
+
+t = lineage.subtree(19);
+letterCount = t.treefun(@numel);
+disp( [t.tostring letterCount.tostring ] ) % Count the number of letters in each string of the t tree
+
+%%
+% *|treefun2|* does the same, but with two trees and a 2-arguments function:
+
+lastLetter = t.treefun2(letterCount, @(a, b) a(b));
+disp(lastLetter.tostring) % Extract the last letter
+
+
+
+
+
+%% Misc functions
+% There is also a variety of methods that generate synchronized trees, made
+% to simplify developping using the class:
+%
+% * *|isemptynode|* return a logical tree where each node is true if the
+% mathcine node in the source true is empty
+
+
+%%
+% Back to <TreeDemo.html main page>.
+
+
+
+
+##### SOURCE END #####
+--></body></html>

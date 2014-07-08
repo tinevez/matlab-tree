@@ -1,0 +1,538 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Creating, modifying and accessing a tree</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-06-11"><meta name="DC.source" content="TreeDemo_creating.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Creating, modifying and accessing a tree</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Creating and building a tree from scratch</a></li><li><a href="#4">Adding a node</a></li><li><a href="#8">Removing a node</a></li><li><a href="#9">What data to put in the tree?</a></li><li><a href="#11">Accessing the tree content</a></li><li><a href="#12">Modifying the tree content</a></li><li><a href="#13">Grafting and chopping a branch</a></li><li><a href="#17">Getting a branch as a subtree</a></li><li><a href="#18">Copying a tree and its structure</a></li><li><a href="#23">Why copy-trees are important: synchronized trees</a></li></ul></div><h2>Creating and building a tree from scratch<a name="1"></a></h2><p>A new empty tree is created by simply calling the empty constructor:</p><pre class="codeinput">t = tree  <span class="comment">%#ok&lt;NASGU,NOPTS&gt;</span>
+</pre><pre class="codeoutput">
+t = 
+
+  tree with properties:
+
+      Node: {[]}
+    Parent: 0
+
+</pre><p>or specifying the root node content as an extra argument:</p><pre class="codeinput">t = tree(<span class="string">'I am the root node'</span>) <span class="comment">%#ok&lt;NOPTS&gt;</span>
+</pre><pre class="codeoutput">
+t = 
+
+  tree with properties:
+
+      Node: {'I am the root node'}
+    Parent: 0
+
+</pre><p>Note that the object itself is composed only of a double array that holds the node's parent indices (0 for the root, which has no parent), and a cell array to hold the node's data.</p><h2>Adding a node<a name="4"></a></h2><p>We will add a child node to the root, and <i>voluntarily</i> make a mistake. You add nodes to another node in a tree using the <b><tt>addnode</tt></b> method. It requires you pass the <b>index</b> of the node you want to attach the node to, and the new node content. The root of the tree has always the index 1:</p><pre class="codeinput">t.addnode(1, <span class="string">'I am the first child of the root'</span>);
+</pre><p>But look what happened to the tree stored in <tt>t</tt>:</p><pre class="codeinput">disp(t.tostring)
+</pre><pre class="codeoutput">I am the root node  
+</pre><p>Apparently, no nodes were attached to the root. It is because the <tt>tree</tt> class is not a handle class. It is a per-value class, so it cannot be edited by reference, like you would do in Java. It is the only tricky bit with this, and can be confusing if like me you are used to other OOP languages, such as Java.</p><p>So, when adding a node, you do not modify the variable <tt>t</tt>, but copy the resulting tree to <tt>t</tt>, like this:</p><pre class="codeinput">t = t.addnode(1, <span class="string">'I am the first child of the root'</span>);
+disp(t.tostring)
+</pre><pre class="codeoutput">       I am the root node         
+                                  
+                |                 
+I am the first child of the root  
+</pre><p>Since we specify the target node using its index in the tree, you might want to store it for a later usage. The second output of <b><tt>addnode</tt></b> is the index of the newly attached node, and can be used in the following manner:</p><pre class="codeinput">t = tree(<span class="string">'root'</span>);
+[ t node1 ] = t.addnode(1, <span class="string">'Node 1'</span>); <span class="comment">%% attach to root</span>
+<span class="comment">% node1 now contains the index of the first node.</span>
+[ t node2 ] = t.addnode(1, <span class="string">'Node 2'</span>); <span class="comment">%% attach to root</span>
+[ t node11 ] = t.addnode(node1, <span class="string">'Child of node 1'</span>); <span class="comment">%% attach to first node</span>
+disp(t.tostring)
+</pre><pre class="codeoutput">          root           
+        +--+--------+    
+        |           |    
+     Node 1      Node 2  
+        |                
+        |                
+ Child of node 1         
+</pre><h2>Removing a node<a name="8"></a></h2><p>Removing a node is not a trivial operation. The node gets removed, but its children cannot be left on their own. So when you remove a node, its children get reattached to the node's parent.</p><pre class="codeinput">t = t.removenode(node1);
+disp(t.tostring)
+</pre><pre class="codeoutput">          root           
+   +-------+----+        
+   |            |        
+Node 2   Child of node 1 
+</pre><h2>What data to put in the tree?<a name="9"></a></h2><p>Well, since node data are internally represented as a cell array, you can put anything, and it does not have to be homogeneous:</p><pre class="codeinput">t = tree(<span class="string">'string'</span>);
+[t n1] = t.addnode(1, 124);
+[t n2] = t.addnode(1, pi);
+[t n3] = t.addnode(1, rand(5 ,5));
+disp(t.tostring)
+</pre><pre class="codeoutput">          string           
+  +-----+---+------+       
+  |     |          |       
+ 124 3.1416  &lt;5x5 double&gt;  
+</pre><p>Having non-homogeneous data in a tree can be nice, but the price to pay is that errors might pop up if you try some operations on trees that assume the data is homogeneous. There is no protection against such errors; we assume you know what you are doing.</p><h2>Accessing the tree content<a name="11"></a></h2><p>To get what is stored at a node, you must know its index, and use the <b><tt>get</tt></b> method:</p><pre class="codeinput">t.get(1)  <span class="comment">% the root content</span>
+t.get(n1) <span class="comment">% first node content</span>
+t.get(n2) <span class="comment">% etc...</span>
+t.get(n3)
+</pre><pre class="codeoutput">
+ans =
+
+string
+
+
+ans =
+
+   124
+
+
+ans =
+
+    3.1416
+
+
+ans =
+
+    0.3816    0.4456    0.6797    0.9597    0.2551
+    0.7655    0.6463    0.6551    0.3404    0.5060
+    0.7952    0.7094    0.1626    0.5853    0.6991
+    0.1869    0.7547    0.1190    0.2238    0.8909
+    0.4898    0.2760    0.4984    0.7513    0.9593
+
+</pre><h2>Modifying the tree content<a name="12"></a></h2><p>To change the data stored by one node, you use the counterpart method <b><tt>set</tt></b>, again with the node index. Careful: the by-value access trick plays again here, and you must assign the modified tree to a variable:</p><pre class="codeinput">t = t.set(n2, <span class="string">'I changed.'</span>);
+disp(t.tostring)
+</pre><pre class="codeoutput">            string             
+  +-------+---+--------+       
+  |       |            |       
+ 124 I changed.  &lt;5x5 double&gt;  
+</pre><h2>Grafting and chopping a branch<a name="13"></a></h2><p>You can deal with trees like any good gardener would, and make operations such as grafting. Grafting is like adding a node to a tree, except that this time, you attach a whole tree to a node.</p><pre class="codeinput">t = tree(<span class="string">'A'</span>);
+t = t.addnode(1, <span class="string">'B'</span>);
+t = t.addnode(1, <span class="string">'C'</span>);
+[t targetNode] = t.addnode(1, <span class="string">'D'</span>);
+</pre><p>We need to create another tree to demonstrate grafting. We could do this the usual way, but since <tt>tree</tt> is a per-value class, we can simply copy the first object to a new one, using the trivial syntax:</p><pre class="codeinput">nt = t;
+t = t.graft(targetNode, nt);
+disp(t.tostring)
+</pre><pre class="codeoutput">       A       
+ +--+-+---+    
+ |  |     |    
+ B  C     D    
+          |    
+          |    
+          A    
+       +-++--+ 
+       |  |  | 
+       B  C  D 
+</pre><p>Et voil&agrave;!</p><p>Of course, grafting has its counterpart: chopping.</p><pre class="codeinput">t = t.chop(targetNode);
+disp(t.tostring)
+</pre><pre class="codeoutput">  A   
+ ++-+ 
+ |  | 
+ B  C 
+</pre><p>Note that the target node was removed as well.</p><h2>Getting a branch as a subtree<a name="17"></a></h2><p>You might want to access a branch of the tree, and make a new tree of it. This is done with the <b><tt>subtree</tt></b> method, that requires the index of the node that will become the root of the new tree. All the subnodes of this node will be copied to the new tree:</p><pre class="codeinput">lineage = tree.example;
+t = lineage.subtree(19);
+disp(t.tostring)
+</pre><pre class="codeoutput">                EMS                 
+     +-----------+-----+            
+     |                 |            
+    MS                 E            
+  +--+--+        +-----+-----+      
+  |     |        |           |      
+MS.a  MS.p      E.a         E.p     
+              +--+--+     +--+--+   
+              |     |     |     |   
+            E.al  E.ar  E.pl  E.pr  
+</pre><h2>Copying a tree and its structure<a name="18"></a></h2><p>A very nice feature of this class, synchronized iteration, is based on copying tree structure. So we must know how to copy tree.</p><p>The <tt>tree</tt> class has a copy-constructor, if you pass it a tree as argument:</p><pre class="codeinput">copy = tree(t); <span class="comment">%#ok&lt;NASGU&gt;</span>
+</pre><p>Note this would have worked just the same using the trivial MATLAB assignment syntax:</p><pre class="codeinput">copy = t;
+</pre><p>Again, since <tt>tree</tt> is a per-value class, <tt>copy</tt> is an independent copy of the first tree. A modification made to one of the two trees will not affect the other.</p><p>These two calls copy the whole tree, node content included. Sometimes, you just need to get the tree layout or structure, which is the parent/children hierarchy of the tree, leaving behind any node content. There are several way to do that.</p><p>Using the copy-constructor with a <tt>'clear'</tt> argument copy the tree, but discard any node content:</p><pre class="codeinput">emptyTree = tree(t, <span class="string">'clear'</span>);
+disp(emptyTree.tostring)
+</pre><pre class="codeoutput">        &oslash;         
+  +-----+--+      
+  |        |      
+  &oslash;        &oslash;      
+ ++-+   +--+--+   
+ |  |   |     |   
+ &oslash;  &oslash;   &oslash;     &oslash;   
+       ++-+  ++-+ 
+       |  |  |  | 
+       &oslash;  &oslash;  &oslash;  &oslash; 
+</pre><p>The <tt>'&oslash;'</tt> symbol is used to represent a node with empty content.</p><p>Using the copy-constructor with any other argument will fill the new tree with this argument:</p><pre class="codeinput">oneTree = tree(t, 1);
+zeroTree = tree(t, 0);
+optimisticTree = tree(t, <span class="string">'I feel great!'</span>);
+trueTree = tree(t, true);
+
+<span class="comment">% Display two trees side by side (we can use |horzcat| since their</span>
+<span class="comment">% display string have the same number of rows)</span>
+disp( [ oneTree.tostring  optimisticTree.tostring ] )
+disp(<span class="string">'-'</span>)
+disp( [ zeroTree.tostring trueTree.tostring ] )
+</pre><pre class="codeoutput">        1                                               I feel great!                                       
+  +-----+--+                    +-----------------------------+--------------+                              
+  |        |                    |                                            |                              
+  1        1              I feel great!                                I feel great!                        
+ ++-+   +--+--+          +------+-------+                     +--------------+--------------+               
+ |  |   |     |          |              |                     |                             |               
+ 1  1   1     1    I feel great!  I feel great!         I feel great!                 I feel great!         
+       ++-+  ++-+                                      +------+-------+              +------+-------+       
+       |  |  |  |                                      |              |              |              |       
+       1  1  1  1                                I feel great!  I feel great!  I feel great!  I feel great! 
+-
+        0                        true                 
+  +-----+--+           +-----------+-----+            
+  |        |           |                 |            
+  0        0         true              true           
+ ++-+   +--+--+     +--+--+        +-----+-----+      
+ |  |   |     |     |     |        |           |      
+ 0  0   0     0   true  true     true        true     
+       ++-+  ++-+               +--+--+     +--+--+   
+       |  |  |  |               |     |     |     |   
+       0  0  0  0             true  true  true  true  
+</pre><p>This is nice, because this way you can very easily generate trees that can be used to store extra information on the data stored in the first tree. For our <i>C.elegans</i> lineage, the <tt>lineage</tt> tree holds the cell names, but we could use another one to store their X position at a given time, a third one for their Y position, etc...</p><h2>Why copy-trees are important: synchronized trees<a name="23"></a></h2><p>The trees you initialize this way - copying the structure of a mother tree and filling its content with some default value - have a very nice property: they are <i>synchronized</i>.</p><p>A specific node in the mother tree has the same index than a node in a synchronized tree. You can get both content with the same node index. This property is trivial (if you look at the code, it will jump at you), but it is nonetheless very handy. Of course, this stays valid as long as you do not add or remove any node from one of the tree you want to keep synchronized. The four methods that can mess with synchronization are quite logically:</p><div><ul><li><tt>adddnode</tt></li><li><tt>removenode</tt></li><li><tt>graft</tt></li><li><tt>chop</tt></li></ul></div><p>In the above paragraph we mentioned that we wish to use several trees to store different properties for a common object (rather than a single tree that holds everything), and this is what allows it. When we will meet iteration, it will prove elegant as well.</p><p>If you want to know if two trees are 'synchronized', use the <b><tt>issync</tt></b> method:</p><pre class="codeinput">zeroTree.issync(oneTree)
+</pre><pre class="codeoutput">
+ans =
+
+     1
+
+</pre><pre class="codeinput">oneTree = oneTree.addnode(9, <span class="string">'intrusion'</span>);
+zeroTree.issync(oneTree)
+</pre><pre class="codeoutput">
+ans =
+
+     0
+
+</pre><p>Back to <a href="../index.html">main page</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Creating, modifying and accessing a tree
+
+%% Creating and building a tree from scratch
+%
+% A new empty tree is created by simply calling the empty constructor:
+
+t = tree  %#ok<NASGU,NOPTS>
+
+%%
+% or specifying the root node content as an extra argument:
+
+t = tree('I am the root node') %#ok<NOPTS>
+
+%%
+% Note that the object itself is composed only of a double array that holds
+% the node's parent indices (0 for the root, which has no parent), and a
+% cell array to hold the node's data.
+%
+%% Adding a node
+%
+% We will add a child node to the root, and _voluntarily_ make a mistake.
+% You add nodes to another node in a tree using the *|addnode|* method. It
+% requires you pass the *index* of the node you want to attach the node to,
+% and the new node content. The root of the tree has always the index 1:
+
+t.addnode(1, 'I am the first child of the root');
+
+%%
+% But look what happened to the tree stored in |t|:
+
+disp(t.tostring)
+
+%%
+% Apparently, no nodes were attached to the root. It is because the
+% |tree| class is not a handle class. It is a per-value class, so it cannot
+% be edited by reference, like you would do in Java. It is the only tricky
+% bit with this, and can be confusing if like me you are used to other OOP
+% languages, such as Java. 
+%
+% So, when adding a node, you do not modify the variable |t|, but copy the
+% resulting tree to |t|, like this:
+
+t = t.addnode(1, 'I am the first child of the root');
+disp(t.tostring)
+
+%%
+% Since we specify the target node using its index in the tree, you might
+% want to store it for a later usage. The second output of *|addnode|* is
+% the index of the newly attached node, and can be used in the following
+% manner:
+
+t = tree('root');
+[ t node1 ] = t.addnode(1, 'Node 1'); %% attach to root
+% node1 now contains the index of the first node.
+[ t node2 ] = t.addnode(1, 'Node 2'); %% attach to root
+[ t node11 ] = t.addnode(node1, 'Child of node 1'); %% attach to first node
+disp(t.tostring)
+
+
+
+
+
+
+
+%% Removing a node
+%
+% Removing a node is not a trivial operation. The node gets removed, but
+% its children cannot be left on their own. So when you remove a node, its
+% children get reattached to the node's parent.
+
+t = t.removenode(node1);
+disp(t.tostring)
+
+
+
+
+
+
+
+%% What data to put in the tree?
+%
+% Well, since node data are internally represented as a cell array, you can
+% put anything, and it does not have to be homogeneous:
+
+t = tree('string');
+[t n1] = t.addnode(1, 124);
+[t n2] = t.addnode(1, pi);
+[t n3] = t.addnode(1, rand(5 ,5));
+disp(t.tostring)
+
+%%
+% Having non-homogeneous data in a tree can be nice, but the price to pay
+% is that errors might pop up if you try some operations on trees that
+% assume the data is homogeneous. There is no protection against such
+% errors; we assume you know what you are doing.
+
+
+
+
+
+
+%% Accessing the tree content
+%
+% To get what is stored at a node, you must know its index, and use the
+% *|get|* method:
+
+t.get(1)  % the root content
+t.get(n1) % first node content 
+t.get(n2) % etc...
+t.get(n3)
+
+
+
+
+
+
+%% Modifying the tree content
+%
+% To change the data stored by one node, you use the counterpart method
+% *|set|*, again with the node index. Careful: the by-value access trick plays
+% again here, and you must assign the modified tree to a variable:
+
+t = t.set(n2, 'I changed.');
+disp(t.tostring)
+
+
+
+
+
+
+%% Grafting and chopping a branch
+%
+% You can deal with trees like any good gardener would, and make operations
+% such as grafting. Grafting is like adding a node to a tree, except that
+% this time, you attach a whole tree to a node. 
+
+t = tree('A');
+t = t.addnode(1, 'B');
+t = t.addnode(1, 'C');
+[t targetNode] = t.addnode(1, 'D');
+
+%%
+% We need to create another tree to demonstrate grafting. We could do this
+% the usual way, but since |tree| is a per-value class, we can simply copy
+% the first object to a new one, using the trivial syntax:
+
+nt = t;
+t = t.graft(targetNode, nt);
+disp(t.tostring)
+
+%%
+% Et voilà!
+%
+% Of course, grafting has its counterpart: chopping.
+
+t = t.chop(targetNode);
+disp(t.tostring)
+
+%%
+% Note that the target node was removed as well.
+
+
+
+
+
+
+%% Getting a branch as a subtree
+%
+% You might want to access a branch of the tree, and make a new tree of it.
+% This is done with the *|subtree|* method, that requires the index of the
+% node that will become the root of the new tree. All the subnodes of this
+% node will be copied to the new tree:
+
+lineage = tree.example;
+t = lineage.subtree(19);
+disp(t.tostring)
+
+
+
+
+
+
+%% Copying a tree and its structure
+%
+% A very nice feature of this class, synchronized iteration, is based on
+% copying tree structure. So we must know how to copy tree. 
+%
+% The |tree| class has a copy-constructor, if you pass it a tree as
+% argument:
+
+copy = tree(t); %#ok<NASGU>
+
+%%
+% Note this would have worked just the same using the trivial MATLAB
+% assignment syntax:
+
+copy = t;
+
+%%
+% Again, since |tree| is a per-value class, |copy| is an independent copy
+% of the first tree. A modification made to one of the two trees will not
+% affect the other.
+%
+% These two calls copy the whole tree, node content included. Sometimes,
+% you just need to get the tree layout or structure, which is the
+% parent/children hierarchy of the tree, leaving behind any node content.
+% There are several way to do that. 
+%
+% Using the copy-constructor with a |'clear'| argument copy the tree, but
+% discard any node content:
+
+emptyTree = tree(t, 'clear');
+disp(emptyTree.tostring)
+
+%%
+% The |'ø'| symbol is used to represent a node with empty content.
+%
+% Using the copy-constructor with any other argument will fill the new tree
+% with this argument:
+
+oneTree = tree(t, 1);
+zeroTree = tree(t, 0);
+optimisticTree = tree(t, 'I feel great!');
+trueTree = tree(t, true);
+
+% Display two trees side by side (we can use |horzcat| since their
+% display string have the same number of rows)
+disp( [ oneTree.tostring  optimisticTree.tostring ] )
+disp('-')
+disp( [ zeroTree.tostring trueTree.tostring ] )
+
+%%
+% This is nice, because this way you can very easily generate trees that
+% can be used to store extra information on the data stored in the first
+% tree. For our _C.elegans_ lineage, the |lineage| tree holds the cell
+% names, but we could use another one to store their X position at a given
+% time, a third one for their Y position, etc...
+
+
+
+
+
+
+%% Why copy-trees are important: synchronized trees
+%
+% The trees you initialize this way - copying the structure of a mother
+% tree and filling its content with some default value - have a very nice
+% property: they are _synchronized_. 
+% 
+% A specific node in the mother tree has the same index than a node in a
+% synchronized tree. You can get both content with the same node index.
+% This property is trivial (if you look at the code, it will jump at you),
+% but it is nonetheless very handy. Of course, this stays valid as long as
+% you do not add or remove any node from one of the tree you want to keep
+% synchronized. The four methods that can mess with synchronization are
+% quite logically:
+% 
+% * |adddnode|
+% * |removenode|
+% * |graft|
+% * |chop|
+%
+% In the above paragraph we mentioned that we wish to use several trees to
+% store different properties for a common object (rather than a single tree
+% that holds everything), and this is what allows it. When we will meet
+% iteration, it will prove elegant as well.
+%
+% If you want to know if two trees are 'synchronized', use the *|issync|*
+% method:
+
+zeroTree.issync(oneTree)
+
+%%
+%
+
+oneTree = oneTree.addnode(9, 'intrusion');
+zeroTree.issync(oneTree)
+
+%%
+% Back to <TreeDemo.html main page>.
+
+
+
+##### SOURCE END #####
+--></body></html>

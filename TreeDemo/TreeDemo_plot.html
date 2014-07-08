@@ -1,0 +1,193 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Plotting a tree</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-06-11"><meta name="DC.source" content="TreeDemo_plot.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Plotting a tree</h1><p>The <tt>tree</tt> class has a plot method:</p><pre class="codeinput">[ lineage, duration ] = tree.example; <span class="comment">% 1st one is made of strings only, 2nd one of integers</span>
+slin = lineage.subtree(19); <span class="comment">% Work on a subset</span>
+sdur = duration.subtree(19);
+
+figure(<span class="string">'Position'</span>, [100 100 300 300])
+slin.plot;
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_01.png" alt=""> <p>What is nice is that it can be combined with another synchronized tree to specify the length of the vertical branches. Of course, this second tree must be in sync with the first, and only contain scalar numeric data.</p><p>Do you remember the <tt>example</tt> data? It is made of two synchronized trees. The first one, <tt>lineage</tt> contains the standard name of the <i>C.elegans</i> embryo cells. The second one, <tt>duration</tt>, contains the length, in minutes, of this cell cycle. A way to output the result is the following:</p><pre class="codeinput">figure(<span class="string">'Position'</span>, [100 100 300 300])
+slin.plot(sdur);
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_02.png" alt=""> <p>An extra argument (in the form of a key/value pair) can be passed to specify a Y label, and have the Y ticks shown:</p><pre class="codeinput">figure(<span class="string">'Position'</span>, [100 100 400 400])
+slin.plot(sdur, <span class="string">'YLabel'</span>, {<span class="string">'Division time'</span> <span class="string">'(min)'</span>});
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_03.png" alt=""> <p><i><tt>Interlude:</tt></i> I tried very hard to comply to <a href="http://www.edwardtufte.com/tufte/books_vdqi">Edward Tufte recommendations</a> when generating a graphic plot. The text items are displayed horizontally, directly on the graph to avoid using a legend, the axis ticks are prolonged on the graph as white ticks, the Y axis displays the min and max, etc... Still, my wife and colleagues tell me that this plot hurts their eyes. So following is a way to edit and customize it to your liking.</p><p>The plot method generates 3 outputs that are all synchronized trees. These 3 trees contain the graphic handles to the 3 primitives used to lay the plot, for each node:</p><pre class="codeinput">[vlh, hlh, tlh] = slin.plot(sdur, <span class="string">'YLabel'</span>, {<span class="string">'Division time'</span> <span class="string">'(min)'</span>});
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_04.png" alt=""> <div><ul><li><tt>vlh</tt> contains the handle to the vertical lines that go below the node's location</li><li><tt>hlh</tt> contains the handle to the thick horizontal lines that link the node children</li><li><tt>tlh</tt> contains the handle to the node text item</li></ul></div><p>We can use this for instance to color in red all the nodes that have a duration value larger than 10 minutes:</p><pre class="codeinput">rcolor = [ 0.6 0.2 0.2 ];
+aboveTreshold = sdur &gt; 10; <span class="comment">% true if longer than 10 minutes</span>
+iterator = aboveTreshold.depthfirstiterator;
+<span class="keyword">for</span> i = iterator
+
+   <span class="keyword">if</span>  aboveTreshold.get(i)
+
+       set( vlh.get(i), <span class="string">'Color'</span> , rcolor )
+       set( hlh.get(i), <span class="string">'Color'</span> , rcolor )
+       set( tlh.get(i), <span class="string">'Color'</span> , rcolor )
+
+   <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_05.png" alt=""> <p>The <b><tt>plot</tt></b> method can be passed extra arguments to tune the appearance and location of the plot, using classical key/value pairs. They are documented in the method itself, that you can access by calling</p><pre class="language-matlab">help <span class="string">tree/plot</span>
+</pre><p>Nevertheless, here is just a few of them. The <tt>'TextRotation'</tt> key can be used to rotate labels. If you want to skip the vertical line length tree, you still need to pass an empty array:</p><pre class="codeinput">clf
+slin.plot([], <span class="string">'TextRotation'</span>, 90);
+</pre><img vspace="5" hspace="5" src="TreeDemo_plot_06.png" alt=""> <p>Back to <a href="../index.html">main page</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Plotting a tree
+%
+% 
+% The |tree| class has a plot method:
+
+[ lineage, duration ] = tree.example; % 1st one is made of strings only, 2nd one of integers
+slin = lineage.subtree(19); % Work on a subset
+sdur = duration.subtree(19);
+
+figure('Position', [100 100 300 300])
+slin.plot;
+
+%%
+% What is nice is that it can be combined with another synchronized tree to
+% specify the length of the vertical branches. Of course, this second tree
+% must be in sync with the first, and only contain scalar numeric data.
+%
+% Do you remember the |example| data? It is made of two synchronized trees.
+% The first one, |lineage| contains the standard name of the _C.elegans_
+% embryo cells. The second one, |duration|, contains the length, in
+% minutes, of this cell cycle. A way to output the result is the following:
+
+figure('Position', [100 100 300 300])
+slin.plot(sdur);
+
+%% 
+% An extra argument (in the form of a key/value pair) can be passed to
+% specify a Y label, and have the Y ticks shown:
+
+figure('Position', [100 100 400 400])
+slin.plot(sdur, 'YLabel', {'Division time' '(min)'});
+
+%%
+% _|Interlude:|_ I tried very hard to comply to
+% <http://www.edwardtufte.com/tufte/books_vdqi Edward Tufte
+% recommendations> when generating a graphic plot. The text items are
+% displayed horizontally, directly on the graph to avoid using a legend,
+% the axis ticks are prolonged on the graph as white ticks, the Y axis
+% displays the min and max, etc... Still, my wife and colleagues tell me
+% that this plot hurts their eyes. So following is a way to edit and
+% customize it to your liking.
+%
+% The plot method generates 3 outputs that are all synchronized trees.
+% These 3 trees contain the graphic handles to the 3 primitives used to lay
+% the plot, for each node:
+
+[vlh, hlh, tlh] = slin.plot(sdur, 'YLabel', {'Division time' '(min)'});
+
+%%
+% * |vlh| contains the handle to the vertical lines that go below the
+% node's location
+% * |hlh| contains the handle to the thick horizontal lines that link the
+% node children 
+% * |tlh| contains the handle to the node text item
+% 
+% We can use this for instance to color in red all the nodes that have a
+% duration value larger than 10 minutes:
+
+rcolor = [ 0.6 0.2 0.2 ];
+aboveTreshold = sdur > 10; % true if longer than 10 minutes
+iterator = aboveTreshold.depthfirstiterator;
+for i = iterator
+    
+   if  aboveTreshold.get(i)
+   
+       set( vlh.get(i), 'Color' , rcolor )
+       set( hlh.get(i), 'Color' , rcolor )
+       set( tlh.get(i), 'Color' , rcolor )
+       
+   end
+   
+end
+
+%%
+% The *|plot|* method can be passed extra arguments to tune the appearance
+% and location of the plot, using classical key/value pairs. They are
+% documented in the method itself, that you can access by calling
+%
+%   help tree/plot
+%
+% Nevertheless, here is just a few of them. The |'TextRotation'| key can be
+% used to rotate labels. If you want to skip the vertical line length tree,
+% you still need to pass an empty array:
+
+clf
+slin.plot([], 'TextRotation', 90);
+
+
+%%
+% Back to <TreeDemo.html main page>.
+
+
+
+##### SOURCE END #####
+--></body></html>

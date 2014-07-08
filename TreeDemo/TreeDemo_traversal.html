@@ -1,0 +1,350 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tree traversal</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-06-11"><meta name="DC.source" content="TreeDemo_traversal.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Tree traversal</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Traversing the tree and synchronized iteration</a></li><li><a href="#7">Finding the shortest path between two nodes</a></li><li><a href="#8">Orienting yourself in the tree</a></li></ul></div><h2>Traversing the tree and synchronized iteration<a name="1"></a></h2><p>Once you have a tree you are happy with, you may want to iterate through it to parse all nodes. The problem is that since a tree is not a linear array, there are more than one way to do so.</p><p>The first way is to iterate <b>depth-first</b>. That is, when you meet a node, you are sure that you will parse all of its children and sub-children before parsing its siblings. So you go from the root through the first branch, going as deep as you can until you reach the leaf of that branch. Then you go up just a level, and repeat.</p><p>With the <tt>tree</tt> class, you generate the sequence of indices that will walk you through the tree in a single call:</p><pre class="codeinput">lineage = tree.example;
+t = lineage.subtree(19);
+iterator = t.depthfirstiterator;
+disp(iterator)
+</pre><pre class="codeoutput">     1     2     3     4     5     6     7     8     9    10    11
+
+</pre><p>You see here that we get a line vector of indices. This allows for a simplified syntax for the iteration. Suppose we want to generate a tree that would keep track of the iteration order. A way to do that is the following:</p><pre class="codeinput">df_order = tree(t, <span class="string">'clear'</span>); <span class="comment">% Generate an empty synchronized tree</span>
+iterator = t.depthfirstiterator; <span class="comment">% Doesn't matter whether you call this on |t| or |df_order|</span>
+index = 1;
+<span class="keyword">for</span> i = iterator
+    df_order = df_order.set(i, index);
+    index = index + 1;
+<span class="keyword">end</span>
+disp(df_order.tostring)
+</pre><pre class="codeoutput">         1          
+  +------+--+       
+  |         |       
+  2         5       
+ ++-+   +---+--+    
+ |  |   |      |    
+ 3  4   6      9    
+       ++-+  +-+-+  
+       |  |  |   |  
+       7  8 10  11  
+</pre><p>A second way to traverse the tree is <b>breadth-first</b>. With this iterator, you parse all the nodes of a given depth before going any deeper, regardless of any children a node can have:</p><pre class="codeinput">bf_order = tree(t, <span class="string">'clear'</span>);
+iterator = t.breadthfirstiterator;
+index = 1;
+<span class="keyword">for</span> i = iterator
+    bf_order = bf_order.set(i, index);
+    index = index + 1;
+<span class="keyword">end</span>
+disp(bf_order.tostring)
+</pre><pre class="codeoutput">         1          
+  +------+--+       
+  |         |       
+  2         3       
+ ++-+   +---+--+    
+ |  |   |      |    
+ 4  5   6      7    
+       ++-+  +-+-+  
+       |  |  |   |  
+       8  9 10  11  
+</pre><p>The last way available is a dummy one: it simple output the order in which the nodes have been added to the tree at construction time.</p><pre class="codeinput">na_order = tree(t, <span class="string">'clear'</span>);
+iterator = t.nodeorderiterator;
+index = 1;
+<span class="keyword">for</span> i = iterator
+    na_order = na_order.set(i, index);
+    index = index + 1;
+<span class="keyword">end</span>
+disp(na_order.tostring)
+</pre><pre class="codeoutput">         1          
+  +------+--+       
+  |         |       
+  2         5       
+ ++-+   +---+--+    
+ |  |   |      |    
+ 3  4   6      9    
+       ++-+  +-+-+  
+       |  |  |   |  
+       7  8 10  11  
+</pre><p>Note that in all cases we generated the whole iterating sequence, <i>then</i> used it to actually iterate. If between the call and the iteration you add or remove nodes to the tree, you will completely mess up the calculated iteration order or generate an error. Look above for the section about synchronized tree for the forbidden methods.</p><p>Another important perk is that <i>the iteration sequence is the same for synchronized trees</i>, a simple consequence of using copy trees. That is useful and important for trees depicting multiple properties of a common object.</p><pre class="codeinput">[ lineage, duration ] = tree.example; <span class="comment">% 1st one is made of strings only, 2nd one of integers</span>
+iterator = lineage.breadthfirstiterator;
+<span class="keyword">for</span> i = iterator(1:7) <span class="comment">% print only he first 7 cells</span>
+    fprintf(<span class="string">'The cell %s has an interphase duration of %d minutes.\n'</span>, <span class="keyword">...</span>
+        lineage.get(i), <span class="keyword">...</span>
+        duration.get(i))
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">The cell Zygote has an interphase duration of 13 minutes.
+The cell AB has an interphase duration of 10 minutes.
+The cell P1 has an interphase duration of 17 minutes.
+The cell AB.a has an interphase duration of 16 minutes.
+The cell AB.p has an interphase duration of 1 minutes.
+The cell P2 has an interphase duration of 16 minutes.
+The cell EMS has an interphase duration of 14 minutes.
+</pre><p>Of course, two plain arrays could have yielded the same result. But for this problem, the hierarchy is important, and this is the benefit of using trees. For instance:</p><pre class="codeinput">slin = lineage.subtree(19); <span class="comment">% Work on a subset</span>
+sdur = duration.subtree(19);
+resTree = tree(slin, <span class="string">'clear'</span>);
+iterator = resTree.depthfirstiterator;
+<span class="keyword">for</span> i = iterator
+    resTree = resTree.set(i, sprintf(<span class="string">'%s: (%d min)'</span>, <span class="keyword">...</span>
+        slin.get(i), <span class="keyword">...</span>
+        sdur.get(i)));
+<span class="keyword">end</span>
+disp(resTree.tostring)
+</pre><pre class="codeoutput">                                         EMS: (14 min)                                         
+               +------------------------------+---------------+                                
+               |                                              |                                
+          MS: (1 min)                                    E: (2 min)                            
+       +------+-------+                       +---------------+---------------+                
+       |              |                       |                               |                
+ MS.a: (1 min) MS.p: (10 min)           E.a: (16 min)                   E.p: (3 min)           
+                                      +-------+-------+               +-------+-------+        
+                                      |               |               |               |        
+                               E.al: (16 min)  E.ar: (14 min)  E.pl: (13 min)  E.pr: (10 min)  
+</pre><h2>Finding the shortest path between two nodes<a name="7"></a></h2><p>Path finding is classic problems in graphs where you have two nodes and want to find the path to reach one from the other. The path is simply the ordered sequence of the nodes to traverse.</p><p>For our <tt>tree</tt> class, do not expect anything fancy like Dijkstra algorithm: the tree is a very simple specialization of a graph. The <b><tt>findpath</tt></b> method is the only one available right now, and return the shortest path in terms of number of edges:</p><pre class="codeinput"><span class="comment">% Find the path between node 'ABplp' and node 'Ca'</span>
+  lineage = tree.example;
+  n1 = find(lineage.strcmp(<span class="string">'AB.plp'</span>));
+  n2 = find(lineage.strcmp(<span class="string">'C.a'</span>));
+  path = lineage.findpath(n1, n2) <span class="comment">%#ok&lt;NOPTS&gt;</span>
+  pt = tree(lineage, <span class="string">'clear'</span>);
+  index = 1;
+  <span class="keyword">for</span> i = path
+    pt = pt.set(i, index);
+    index = index + 1;
+  <span class="keyword">end</span>
+  disp(pt.tostring)
+</pre><pre class="codeoutput">
+path =
+
+    14    11     4     2     1    17    18    21    22
+
+                               5                               
+           +------------------+------------+                   
+           |                               |                   
+           4                               6                   
+     +-----+-----+                +-------+----------+         
+     |           |                |                  |         
+     &oslash;           3                7                  &oslash;         
+  +--+--+     +--+--+       +----+----+        +-----+--+      
+  |     |     |     |       |         |        |        |      
+  &oslash;     &oslash;     2     &oslash;       &oslash;         8        &oslash;        &oslash;      
+ ++-+  ++-+  ++-+  ++-+   ++---+   +--+--+    ++-+   +--+--+   
+ |  |  |  |  |  |  |  |   |    |   |     |    |  |   |     |   
+ &oslash;  &oslash;  &oslash;  &oslash;  &oslash;  1  &oslash;  &oslash;   &oslash;    &oslash;   9     &oslash;    &oslash;  &oslash;   &oslash;     &oslash;   
+                         ++-+     ++-+  ++-+        ++-+  ++-+ 
+                         |  |     |  |  |  |        |  |  |  | 
+                         &oslash;  &oslash;     &oslash;  &oslash;  &oslash;  &oslash;        &oslash;  &oslash;  &oslash;  &oslash; 
+</pre><h2>Orienting yourself in the tree<a name="8"></a></h2><p>When traversing a tree, a few methods will help you to know where you are:</p><div><ul><li><b><tt>getparent(node)</tt></b>  return the index of the parent node. The root node has a parent index equals to 0.</li><li><b><tt>getchildren(node)</tt></b>  return the list of the children of this node. Leaf nodes get an empty list. The list is returned as a line vector.</li><li><b><tt>isleaf(node)</tt></b> return <tt>true</tt> is this node is a leaf node.</li></ul></div><p>Back to <a href="../index.html">main page</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tree traversal
+%
+
+%% Traversing the tree and synchronized iteration
+% 
+% Once you have a tree you are happy with, you may want to iterate through
+% it to parse all nodes. The problem is that since a tree is not a linear
+% array, there are more than one way to do so.
+% 
+% The first way is to iterate *depth-first*. That is, when you meet a node,
+% you are sure that you will parse all of its children and sub-children
+% before parsing its siblings. So you go from the root through the first
+% branch, going as deep as you can until you reach the leaf of that branch.
+% Then you go up just a level, and repeat.
+%
+% With the |tree| class, you generate the sequence of indices that will
+% walk you through the tree in a single call:
+
+lineage = tree.example;
+t = lineage.subtree(19);
+iterator = t.depthfirstiterator;
+disp(iterator)
+
+%%
+% You see here that we get a line vector of indices. This allows for a
+% simplified syntax for the iteration. Suppose we want to generate a tree
+% that would keep track of the iteration order. A way to do that is the
+% following:
+
+df_order = tree(t, 'clear'); % Generate an empty synchronized tree
+iterator = t.depthfirstiterator; % Doesn't matter whether you call this on |t| or |df_order|
+index = 1;
+for i = iterator
+    df_order = df_order.set(i, index);
+    index = index + 1;
+end
+disp(df_order.tostring)
+
+%%
+% A second way to traverse the tree is *breadth-first*. With this iterator,
+% you parse all the nodes of a given depth before going any deeper,
+% regardless of any children a node can have:
+
+bf_order = tree(t, 'clear');
+iterator = t.breadthfirstiterator; 
+index = 1;
+for i = iterator
+    bf_order = bf_order.set(i, index);
+    index = index + 1;
+end
+disp(bf_order.tostring)
+
+%%
+% The last way available is a dummy one: it simple output the order in
+% which the nodes have been added to the tree at construction time.
+
+na_order = tree(t, 'clear');
+iterator = t.nodeorderiterator;
+index = 1;
+for i = iterator
+    na_order = na_order.set(i, index);
+    index = index + 1;
+end
+disp(na_order.tostring)
+
+%%
+% Note that in all cases we generated the whole iterating sequence, _then_
+% used it to actually iterate. If between the call and the iteration you
+% add or remove nodes to the tree, you will completely mess up the
+% calculated iteration order or generate an error. Look above for the
+% section about synchronized tree for the forbidden methods.
+%
+% Another important perk is that _the iteration sequence is the same for
+% synchronized trees_, a simple consequence of using copy trees. That is
+% useful and important for trees depicting multiple properties of a common
+% object. 
+
+[ lineage, duration ] = tree.example; % 1st one is made of strings only, 2nd one of integers
+iterator = lineage.breadthfirstiterator;
+for i = iterator(1:7) % print only he first 7 cells
+    fprintf('The cell %s has an interphase duration of %d minutes.\n', ...
+        lineage.get(i), ...
+        duration.get(i)) 
+end
+
+%%
+% Of course, two plain arrays could have yielded the same result. But for
+% this problem, the hierarchy is important, and this is the benefit of
+% using trees. For instance:
+
+slin = lineage.subtree(19); % Work on a subset
+sdur = duration.subtree(19);
+resTree = tree(slin, 'clear');
+iterator = resTree.depthfirstiterator;
+for i = iterator
+    resTree = resTree.set(i, sprintf('%s: (%d min)', ...
+        slin.get(i), ...
+        sdur.get(i)));
+end
+disp(resTree.tostring)
+
+
+
+
+
+
+%% Finding the shortest path between two nodes
+% Path finding is classic problems in graphs where you have two nodes and
+% want to find the path to reach one from the other. The path is simply the
+% ordered sequence of the nodes to traverse.
+%
+% For our |tree| class, do not expect anything fancy like Dijkstra
+% algorithm: the tree is a very simple specialization of a graph. The
+% *|findpath|* method is the only one available right now, and return the
+% shortest path in terms of number of edges:
+
+% Find the path between node 'ABplp' and node 'Ca'
+  lineage = tree.example;
+  n1 = find(lineage.strcmp('AB.plp'));
+  n2 = find(lineage.strcmp('C.a'));
+  path = lineage.findpath(n1, n2) %#ok<NOPTS>
+  pt = tree(lineage, 'clear');
+  index = 1;
+  for i = path
+    pt = pt.set(i, index);
+    index = index + 1;
+  end
+  disp(pt.tostring)
+
+
+
+  
+
+
+%% Orienting yourself in the tree
+%
+% When traversing a tree, a few methods will help you to know where you
+% are:
+%
+% * *|getparent(node)|*  return the index of the parent node. The root node
+% has a parent index equals to 0.
+% * *|getchildren(node)|*  return the list of the children of this node.
+% Leaf nodes get an empty list. The list is returned as a line vector.
+% * *|isleaf(node)|* return |true| is this node is a leaf node.
+
+
+%%
+% Back to <TreeDemo.html main page>.
+
+
+
+##### SOURCE END #####
+--></body></html>

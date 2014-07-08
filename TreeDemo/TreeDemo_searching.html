@@ -1,0 +1,319 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Searching the tree</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-06-11"><meta name="DC.source" content="TreeDemo_searching.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Searching the tree</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Searching a tree for numerical data</a></li><li><a href="#7">Searching a tree for text data</a></li></ul></div><h2>Searching a tree for numerical data<a name="1"></a></h2><p>We have been playing with node indices since the beginning, assuming we knew what node corresponded to what index. You may want to search a tree, to get the index of a particular node.</p><p>There is no specialized method to search a tree. I tried to stick to the standard MATLAB syntax, and simply wrapped or implemented the MATLAB standard search functions for trees.So if you know how to search an array, you already know everything.</p><p>Here is an example: The <tt>example</tt> static method of the <tt>tree</tt> class returns two synchronized trees. The first one, <tt>lineage</tt> contains the standard name of the <i>C.elegans</i> embryo cells. The second one, <tt>duration</tt>, contains the length, in minutes, of this cell cycle.</p><pre class="codeinput">[ lineage, duration ] = tree.example; <span class="comment">% 1st one is made of strings only, 2nd one of integers</span>
+disp(duration.tostring)
+</pre><pre class="codeoutput">                                   2                                   
+             +--------------------+--------------+                     
+             |                                   |                     
+            19                                  19                     
+      +------+------+                  +--------+-----------+          
+      |             |                  |                    |          
+     16            16                 18                    9          
+  +---+--+       +--+---+       +-----+-----+         +-----+---+      
+  |      |       |      |       |           |         |         |      
+ 10      6      16     16      11           9         6         4      
+ ++-+  +-+-+   ++--+  ++--+    ++---+    +-+---+    ++--+    +-+---+   
+ |  |  |   |   |   |  |   |    |    |    |     |    |   |    |     |   
+ 9  9 10  10  13   8 11   7   12    6    5     5   18   9   18     2   
+                             ++--+     ++--+  ++-+         ++--+  ++-+ 
+                             |   |     |   |  |  |         |   |  |  | 
+                            12   4    17   4  3  5        20   9  5  8 
+</pre><p>Here is how find the nodes with a duration longer than 15 minutes:</p><pre class="codeinput">indices = find ( duration &gt; 15 );
+<span class="keyword">for</span> i = indices
+    fprintf(<span class="string">'The cell %s has an interphase duration of %d minutes.\n'</span>, <span class="keyword">...</span>
+        lineage.get(i), <span class="keyword">...</span>
+        duration.get(i) ); <span class="comment">% We will speak of synchronized iteration later</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">The cell AB has an interphase duration of 19 minutes.
+The cell AB.a has an interphase duration of 16 minutes.
+The cell AB.p has an interphase duration of 16 minutes.
+The cell AB.pl has an interphase duration of 16 minutes.
+The cell AB.pr has an interphase duration of 16 minutes.
+The cell P1 has an interphase duration of 19 minutes.
+The cell P2 has an interphase duration of 18 minutes.
+The cell C.aa has an interphase duration of 17 minutes.
+The cell MS.a has an interphase duration of 18 minutes.
+The cell E.a has an interphase duration of 18 minutes.
+The cell E.al has an interphase duration of 20 minutes.
+</pre><p>The function <b><tt>all</tt></b> and <b><tt>any</tt></b> have also been implemented, and serve to interrogate a whole logical tree:</p><pre class="codeinput"><span class="comment">% Are all durations longer than 2 minutes?</span>
+all( duration &gt; 2 )
+</pre><pre class="codeoutput">
+ans =
+
+     0
+
+</pre><pre class="codeinput"><span class="comment">% Is there any cell which interphase last less than 5 minutes and more than</span>
+<span class="comment">% 0 minutes?</span>
+any( duration &lt; 5 &amp; duration &gt; 0 )
+</pre><pre class="codeoutput">
+ans =
+
+     1
+
+</pre><pre class="codeinput"><span class="comment">% What ones?</span>
+find( duration &lt; 5 &amp; duration &gt; 0 )
+</pre><pre class="codeoutput">
+ans =
+
+     1    24    26    31    35    40
+
+</pre><pre class="codeinput"><span class="comment">% Let's get their name:</span>
+<span class="keyword">for</span> i = find( duration &lt; 5 &amp; duration &gt; 0 )
+    disp(lineage.get(i))
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Zygote
+C.ap
+C.pa
+E
+E.p
+Z3
+</pre><h2>Searching a tree for text data<a name="7"></a></h2><p>In summary, if you want to search for numerical data within a tree, logical operations and the <b><tt>find</tt></b> method are your friends. If you want now to search for text data, you have to use string comparison and string parsing methods.</p><p>Here is a list of the methods that compare two synchronized trees based on their string content, node against node:</p><div><ul><li><b><tt>strcmp</tt></b> Compare two trees made of strings, or one tree and a string.</li><li><b><tt>strcmpi</tt></b> The same, but case-insensitive.</li><li><b><tt>strncmp</tt></b> Compare two trees made of strings, or one tree and a string, using the first N characters.</li><li><b><tt>strncmpi</tt></b> The same, but case-insensitive.</li></ul></div><p>These 4 methods offer scalar expansion: if one argument is a string instead of a tree, it is compared against all nodes of the tree. For instance:</p><pre class="codeinput"><span class="comment">% Find the node named 'P3':</span>
+id_P3 = find( strcmp(lineage, <span class="string">'P3'</span>) ) <span class="comment">%#ok&lt;NOPTS&gt;</span>
+</pre><pre class="codeoutput">
+id_P3 =
+
+    20
+
+</pre><pre class="codeinput"><span class="comment">% Find all the descendants of the cell AB (their names start all with</span>
+<span class="comment">% 'AB'), and display the search result as a tree.</span>
+ABdesc = strncmp(lineage, <span class="string">'AB'</span>, 2);
+disp(ABdesc.tostring)
+</pre><pre class="codeoutput">                                                                   false                                                                   
+                       +--------------------------------------------+------------------------+                                             
+                       |                                                                     |                                             
+                     true                                                                  false                                           
+           +-----------+-----------+                                    +-------------------+------------------------+                     
+           |                       |                                    |                                            |                     
+         true                    true                                 false                                        false                   
+     +-----+-----+           +-----+-----+                +------------+----------+                    +-------------+------+              
+     |           |           |           |                |                       |                    |                    |              
+   true        true        true        true             false                   false                false                false            
+  +--+--+     +--+--+     +--+--+     +--+--+         +--+-------+         +------+------+          +--+---+         +------+------+       
+  |     |     |     |     |     |     |     |         |          |         |             |          |      |         |             |       
+true  true  true  true  true  true  true  true      false      false     false         false      false  false     false         false     
+                                                   +--+---+             +--+---+      +--+---+                    +--+---+      +--+---+   
+                                                   |      |             |      |      |      |                    |      |      |      |   
+                                                 false  false         false  false  false  false                false  false  false  false 
+</pre><p>Other search methods allow to inspect the content of each node:</p><div><ul><li><b><tt>strfind</tt></b> Search for a pattern in a tree content</li></ul></div><p>Regular expression are also implemented, if you need more elaborated searches:</p><div><ul><li><b><tt>regexp</tt></b> Compare two trees made of strings, using regular expressions.</li><li><b><tt>regexpi</tt></b> The same, but case-insensitive.</li></ul></div><p>And there is also the basic tools for string manipulation and substitutions:</p><div><ul><li><b><tt>strrep</tt></b> Replace a string with another one in a tree.</li><li><b><tt>regexprep</tt></b> Replace, using regular expressions.</li></ul></div><p>All these methods return a tree, and their call can be chained. For instance, here we:</p><div><ol><li>Start from the <tt>lineage</tt> tree</li><li>Replace all cell names starting by 'AB' with 'P0a'</li><li>Add a point before each lower-case letter</li><li>Print the resulting tree</li></ol></div><pre class="codeinput">lineage.strrep(<span class="string">'AB'</span>, <span class="string">'P0a'</span>).regexprep(<span class="string">'([a-z])'</span>, <span class="string">'\.$1'</span>).tostring
+</pre><pre class="codeoutput">
+ans =
+
+                                                                                           Z.y.g.o.t.e                                                                                           
+                                                   +-------------------------------------------+----------------------------------------------------+                                            
+                                                   |                                                                                                |                                            
+                                                 P0.a                                                                                              P1                                            
+                         +-------------------------+-------------------------+                                               +---------------------+---------------------+                       
+                         |                                                   |                                               |                                           |                       
+                      P0.a..a                                             P0.a..p                                           P2                                          EMS                      
+            +------------+------------+                         +------------+------------+                  +--------------+-----+                      +---------------+------+                
+            |                         |                         |                         |                  |                    |                      |                      |                
+        P0.a..a.l                 P0.a..a.r                 P0.a..p.l                 P0.a..p.r             P3                    C                     MS                      E                
+      +-----+------+            +-----+------+            +-----+------+            +-----+------+         ++----+        +-------+-------+           +--+---+          +-------+-------+        
+      |            |            |            |            |            |            |            |         |     |        |               |           |      |          |               |        
+ P0.a..a.l.a  P0.a..a.l.p  P0.a..a.r.a  P0.a..a.r.p  P0.a..p.l.a  P0.a..p.l.p  P0.a..p.r.a  P0.a..p.r.p   P4     D      C..a            C..p        MS..a  MS..p      E..a            E..p       
+                                                                                                         +-+-+        +---+---+       +---+---+                     +---+---+       +---+---+    
+                                                                                                         |   |        |       |       |       |                     |       |       |       |    
+                                                                                                        Z2  Z3     C..a.a  C..a.p  C..p.a  C..p.p                E..a.l  E..a.r  E..p.l  E..p.r  
+
+</pre><p>Generally, all these methods have the same syntax and options than their core MATLAB counterparts. They only differ in that they operate on and return trees. Therefore, if you want to know more on how to prepare a search, read the corresponding core functions help section.</p><p>Back to <a href="../index.html">main page</a>.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Searching the tree
+%
+
+%% Searching a tree for numerical data
+%
+% We have been playing with node indices since the beginning, assuming we
+% knew what node corresponded to what index. You may want to search a tree,
+% to get the index of a particular node.
+%
+% There is no specialized method to search a tree. I tried to stick to the
+% standard MATLAB syntax, and simply wrapped or implemented the MATLAB
+% standard search functions for trees.So if you know how to search an
+% array, you already know everything.
+%
+% Here is an example: The |example| static method of the |tree| class
+% returns two synchronized trees. The first one, |lineage| contains the
+% standard name of the _C.elegans_ embryo cells. The second one,
+% |duration|, contains the length, in minutes, of this cell cycle. 
+
+[ lineage, duration ] = tree.example; % 1st one is made of strings only, 2nd one of integers
+disp(duration.tostring)
+
+%%
+% Here is how find the nodes with a duration longer than 15 minutes:
+
+indices = find ( duration > 15 );
+for i = indices
+    fprintf('The cell %s has an interphase duration of %d minutes.\n', ...
+        lineage.get(i), ...
+        duration.get(i) ); % We will speak of synchronized iteration later
+end
+
+%% 
+% The function *|all|* and *|any|* have also been implemented, and serve to
+% interrogate a whole logical tree:
+
+% Are all durations longer than 2 minutes?
+all( duration > 2 ) 
+
+%%
+
+% Is there any cell which interphase last less than 5 minutes and more than
+% 0 minutes?
+any( duration < 5 & duration > 0 )
+
+%%
+
+% What ones?
+find( duration < 5 & duration > 0 )
+
+%%
+
+% Let's get their name:
+for i = find( duration < 5 & duration > 0 )
+    disp(lineage.get(i))
+end
+
+
+
+
+
+
+%% Searching a tree for text data
+% In summary, if you want to search for numerical data within a tree,
+% logical operations and the *|find|* method are your friends. If you want
+% now to search for text data, you have to use string comparison and string
+% parsing methods.
+%
+% Here is a list of the methods that compare two synchronized trees based
+% on their string content, node against node:
+%
+% * *|strcmp|* Compare two trees made of strings, or one tree and a string.
+% * *|strcmpi|* The same, but case-insensitive.
+% * *|strncmp|* Compare two trees made of strings, or one tree and a
+% string, using the first N characters.
+% * *|strncmpi|* The same, but case-insensitive.
+%
+% These 4 methods offer scalar expansion: if one argument is a string
+% instead of a tree, it is compared against all nodes of the tree. For
+% instance:
+
+% Find the node named 'P3':
+id_P3 = find( strcmp(lineage, 'P3') ) %#ok<NOPTS>
+
+%%
+
+% Find all the descendants of the cell AB (their names start all with
+% 'AB'), and display the search result as a tree.
+ABdesc = strncmp(lineage, 'AB', 2);
+disp(ABdesc.tostring)
+
+%%
+% Other search methods allow to inspect the content of each node:
+%
+% * *|strfind|* Search for a pattern in a tree content
+%
+% Regular expression are also implemented, if you need more elaborated
+% searches:
+%
+% * *|regexp|* Compare two trees made of strings, using regular expressions.
+% * *|regexpi|* The same, but case-insensitive.
+%
+
+%%
+% And there is also the basic tools for string manipulation and
+% substitutions:
+%
+% * *|strrep|* Replace a string with another one in a tree.
+% * *|regexprep|* Replace, using regular expressions.
+%
+% All these methods return a tree, and their call can be chained. For
+% instance, here we:
+%
+% # Start from the |lineage| tree
+% # Replace all cell names starting by 'AB' with 'P0a'
+% # Add a point before each lower-case letter
+% # Print the resulting tree
+
+lineage.strrep('AB', 'P0a').regexprep('([a-z])', '\.$1').tostring
+
+%%
+% Generally, all these methods have the same syntax and options than their
+% core MATLAB counterparts. They only differ in that they operate on and
+% return trees. Therefore, if you want to know more on how to prepare a
+% search, read the corresponding core functions help section.
+
+
+
+%%
+% Back to <TreeDemo.html main page>.
+
+
+##### SOURCE END #####
+--></body></html>
