@@ -16,7 +16,7 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
 % % Create a copy of the tree that holds the order of iteration
 % lineage = tree.example;
 % itOrder = tree(lineage, 'clear'); % Copy the tree structure only
-% iterator = itOrder.depthFirstIterator;
+% iterator = itOrder.depthfirstiterator;
 % index = 1;
 % for i = iterator
 %   itOrder = itOrder.set(i, index);
@@ -27,7 +27,7 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
 % EXAMPLE 2
 % % List the content of a subtree of the tree
 % lineage = tree.example;
-% iterator = lineage.depthFirstIterator(19);
+% iterator = lineage.depthfirstiterator(19);
 % content = cell(numel(iterator), 1);
 % index = 1;
 % for i = iterator
