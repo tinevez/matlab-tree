@@ -111,6 +111,8 @@ classdef tree
             end
             
             obj.Node{end+1} = data;
+            obj.Node=obj.Node(:);
+
             
             obj.Parent = [
                 obj.Parent
