@@ -110,11 +110,7 @@ classdef tree
                 return
             end
             
-            %TODO: fails with at least some custom classes
-            obj.Node = [
-                obj.Node
-                data
-                ];
+            obj.Node{end+1} = data;
             
             obj.Parent = [
                 obj.Parent
