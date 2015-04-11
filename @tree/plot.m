@@ -295,10 +295,13 @@ function [vLineHandleTree, hLineHandleTree, textHandleTree] = plot(obj, heightTr
             % The label = content
             content = obj.get(i);
             if isempty(content)
-                content = 'ø';
+                content = 'ï¿½';
             end
-            if ~ischar(content)
-                content = num2str(content);
+            
+            if isnumeric(content)
+                content = num2str(content)
+            else
+                content=class(content);
             end
             
             ht = text(x1, y2, contentfun(content), ...  A hack to have text displayed above bars

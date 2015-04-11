@@ -57,14 +57,14 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
            if sorted && numel(children) > 1
                
                contents = obj.Node(children);
-               [~, sorting_array] = sortrows(contents);
-               children = children(sorting_array);
+               try
+                  [~, sorting_array] = sortrows(contents);
+                  children = children(sorting_array)
+                catch
+                  fprintf('%s: Failed to sort tree contents. Data type likely not sortable\n',mfilename)
+                  children=children(1:length(contents));
+                end
                
-           end
-           
-           cellval = cell(numel(children), 1);
-           for i = 1 : numel(children)
-               cellval{i} = recurse(children(i));
            end
            val = [ val cellval{:} ] ;
            
