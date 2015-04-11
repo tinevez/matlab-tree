@@ -59,7 +59,7 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
                contents = obj.Node(children);
                try
                   [~, sorting_array] = sortrows(contents);
-                  children = children(sorting_array)
+                  children = children(sorting_array);
                 catch
                   fprintf('%s: Failed to sort tree contents. Data type likely not sortable\n',mfilename)
                   children=children(1:length(contents));
