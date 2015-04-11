@@ -295,7 +295,7 @@ function [vLineHandleTree, hLineHandleTree, textHandleTree] = plot(obj, heightTr
             % The label = content
             content = obj.get(i);
             if isempty(content)
-                content = '�';
+                content = 'o';
             end
             
             if isnumeric(content)
