@@ -46,7 +46,8 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
     IDs = recurse(startNode);
 
     function val = recurse(node)
-        
+        showWarning=0;
+
         val = node;
         if obj.isleaf(node)
             return
@@ -61,7 +62,9 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
                   [~, sorting_array] = sortrows(contents);
                   children = children(sorting_array);
                 catch
-                  fprintf('%s: Failed to sort tree contents. Data type likely not sortable\n',mfilename)
+                  if showWarning
+                      fprintf('%s: Failed to sort tree contents. Data type likely not sortable\n',mfilename)
+                  end
                   children=children(1:length(contents));
                 end
                
