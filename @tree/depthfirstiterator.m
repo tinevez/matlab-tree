@@ -66,6 +66,13 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
                 end
                
            end
+
+
+           cellval = cell(numel(children), 1); %prealloacte a cell array
+           for ii = 1 : numel(children)
+               cellval{ii} = recurse(children(ii)); %recursive function call
+           end
+
            val = [ val cellval{:} ] ;
            
         end
