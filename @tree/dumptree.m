@@ -26,13 +26,13 @@ if nargin<2
 end
 
 
-str= ''
+str= '';
 for ii=1:length(obj.Node)
     if isempty(nodeFunc)
         nodeData =  obj.Node{ii};
     else
-        nodeData = nodeFunc(obj.Node{ii})
+        nodeData = nodeFunc(obj.Node{ii});
     end
 
-    str = [str,sprintf('%d,%d,%s\n',ii,obj.Parent(ii),nodeData)]
+    str = [str,sprintf('%d,%d,%s\n',ii,obj.Parent(ii),nodeData)];
 end
