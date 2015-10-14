@@ -21,13 +21,13 @@ classdef tree
 % Jean-Yves Tinevez <tinevez@pasteur.fr> March 2012
     
     properties (SetAccess = private)
-        % Hold the data at each node
-        Node = { [] };
-        
         % Index of the parent node. The root of the tree as a parent index
         % equal to 0.
         Parent = [ 0 ]; %#ok<NBRAK>
-        
+    end
+    
+    properties (SetAccess = public)
+        Node = { [] }; % Hold the data at each node
     end
     
     methods
