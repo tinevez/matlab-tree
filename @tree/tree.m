@@ -110,9 +110,8 @@ classdef tree
                 return
             end
             
-            obj.Node{end+1} = data;
-            obj.Node=obj.Node(:);
-
+            % Expand the cell by
+            obj.Node{ end + 1, 1 } = data;
             
             obj.Parent = [
                 obj.Parent

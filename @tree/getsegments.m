@@ -4,9 +4,9 @@ function segments = getsegments(obj, linkSegments, nodeID, segments)
 % segments = getsegments(obj, linkSegments)
 %
 % Options
-% If linksegments is 1, then the branch node is added to each returned segement. This makes
+% If linkSegments is 1, then the branch node is added to each returned segement. This makes
 % it possible to plot the data without gaps appearing. This is the default. 
-% If linksegments is 0, then the no duplicate points are returned.
+% If linkSegments is 0, then the no duplicate points are returned.
 %
 % Examples
 % segments = myTree.getsegments %for plotting a tree without repeats
@@ -36,10 +36,10 @@ while length(nodeID)==1 %Loop until we get to a branch point
     nodeID = obj.getchildren(nodeID);
 end
 
-%Store our branch point. 
+%Store this segment
 segments = [segments,thisPath];
 
-%Go into the branches
+%Go into the branches with a recursive function call
 for ii=1:length(nodeID)
     segments=obj.getsegments(linkSegments,nodeID(ii),segments);
 end
