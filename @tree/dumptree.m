@@ -5,15 +5,17 @@ function str = dumptree(obj, nodeFunc)
 % Each line is in the format:
 % node_index , node_parent , node_contents
 %
-% If node_contents is a string then the it is simply printed. 
-% If node_contents is anything else, then the use must supply
+% If the node_contents is a string then the it is simply printed. 
+% If node_contents is anything else, then the user must supply
 % a function handle (nodeFunc) that tells dumptree how to handle
 % the data. 
 %
-% examples
+% Examples
 % myTree.dumptree(@(n) sprintf('%d,%d,%d',n.xVoxel,n.yVoxel,n.zVoxel))
-% myTree.dumptree(@treeDumperInPathSomewhere)
-%
+% myTree.dumptree(@treeDumperFncInPathSomewhere)
+% myTree.dumptree()
+% dumpTree(myTree)
+% 
 % Rob Campbell, Basel, 2015
 
 
@@ -27,7 +29,7 @@ end
 
 
 str= '';
-for ii=1:length(obj.Node)
+for ii=1:obj.nnodes
     if isempty(nodeFunc)
         nodeData =  obj.Node{ii};
     else
