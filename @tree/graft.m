@@ -15,10 +15,9 @@ function obj = graft(obj, ID, othertree)
     nNodes = numel(obj.Parent);
 
     otParents = othertree.Parent;
-    % Shift other parent indices
-    otParents = otParents + nNodes;
-    % Make the other root a child of the target node
-    otParents(1) = ID;
+    
+    otParents = otParents + nNodes; % Shift other parent indices
+    otParents(1) = ID; % Make the other root a child of the target node
     
     % Concatenate
     newParents = [ obj.Parent ; otParents ];
