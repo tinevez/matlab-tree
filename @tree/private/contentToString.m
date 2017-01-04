@@ -4,6 +4,7 @@ function str = contentToString(content)
         % Nothing -> print the void symbol
         str = 'ø';
     elseif ~ischar(content)
+
         if numel(content) == 1
             % Scalar stuff we most probably be able to print
             if islogical(content)
@@ -30,9 +31,14 @@ function str = contentToString(content)
                 % Cell with one element -> append cell and print element
                 str = ['cell:' contentToString(content{1}) ];
                 
-            else
-                % Scalar number -> print it
+            elseif isnumeric(content)
+
+                % number -> print it
                 str = num2str(content);
+
+            else 
+                %unknown or a struct so print this instead
+                str = class(content);
             end
             
         else

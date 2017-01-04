@@ -16,7 +16,7 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
 % % Create a copy of the tree that holds the order of iteration
 % lineage = tree.example;
 % itOrder = tree(lineage, 'clear'); % Copy the tree structure only
-% iterator = itOrder.depthFirstIterator;
+% iterator = itOrder.depthfirstiterator;
 % index = 1;
 % for i = iterator
 %   itOrder = itOrder.set(i, index);
@@ -27,7 +27,7 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
 % EXAMPLE 2
 % % List the content of a subtree of the tree
 % lineage = tree.example;
-% iterator = lineage.depthFirstIterator(19);
+% iterator = lineage.depthfirstiterator(19);
 % content = cell(numel(iterator), 1);
 % index = 1;
 % for i = iterator
@@ -46,7 +46,8 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
     IDs = recurse(startNode);
 
     function val = recurse(node)
-        
+        showWarning=0;
+
         val = node;
         if obj.isleaf(node)
             return
@@ -57,15 +58,24 @@ function IDs = depthfirstiterator(obj, startNode, sorted)
            if sorted && numel(children) > 1
                
                contents = obj.Node(children);
-               [~, sorting_array] = sortrows(contents);
-               children = children(sorting_array);
+               try
+                  [~, sorting_array] = sortrows(contents);
+                  children = children(sorting_array);
+                catch
+                  if showWarning
+                      fprintf('%s: Failed to sort tree contents. Data type likely not sortable\n',mfilename)
+                  end
+                  children=children(1:length(contents));
+                end
                
            end
-           
-           cellval = cell(numel(children), 1);
-           for i = 1 : numel(children)
-               cellval{i} = recurse(children(i));
+
+
+           cellval = cell(numel(children), 1); %prealloacte a cell array
+           for ii = 1 : numel(children)
+               cellval{ii} = recurse(children(ii)); %recursive function call
            end
+
            val = [ val cellval{:} ] ;
            
         end

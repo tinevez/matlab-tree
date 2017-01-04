@@ -20,11 +20,22 @@ function path = findpath(obj, n1, n2)
 %   index = index + 1;
 % end
 % disp(pt.tostring)
+%
+%
 
+
+
+    
     if n1 == n2
         
         path = n1;
         
+    elseif n2 == 1
+        path = obj.pathtoroot(n1);
+
+    elseif n1 == 1
+        path = fliplr(obj.pathtoroot(n2));
+
     elseif any( n2 == obj.depthfirstiterator(n1) )
         % n2 is in the children of n1
         path = [ n1 descend(n1) ];
