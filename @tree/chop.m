@@ -13,7 +13,7 @@ function obj = chop(obj, node)
     
     % Remove unwanted nodes
     np ( iterator ) = [];
-    
+
     % Shift parent value: if a parent were after some nodes we removed, we
     % need to shift its value by an amount equal to the number of parent we
     % removed, and that were BEFORE the target parent

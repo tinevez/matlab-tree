@@ -10,7 +10,8 @@ function obj = removesubtree(obj, node)
 %  es = ex.removesubtree(10);
 %
 % Rob Campbell - 2016
-
+%
+% NOTE: this seems to do the same thing as the chop method. I haven't compared the two. 
     
     [~,ind] = obj.subtree(node);
     ind = cell2mat(ind.Node);
