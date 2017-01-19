@@ -1,4 +1,4 @@
-matlab-tree
+# matlab-tree
 ===========
 
-A MATLAB class to represent the tree data structure.
+A MATLAB class to represent tree data.
