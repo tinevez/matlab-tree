@@ -1,5 +1,5 @@
 function [st, index] = subtree(obj, node, condition)
-%%SUBTREE Returns the sub-tree made of all the nodes below the given one.
+% Returns the sub-tree made of all the nodes below the given one.
 %
 % st = subtree(obj, node) returns a new tree made of all the nodes found
 % under the specified node.

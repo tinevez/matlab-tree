@@ -1,4 +1,5 @@
 function obj = removenode(obj , node)
+% remove selected node and return tree with this node missing
 
     if node <= 1
         error('MATLAB:tree:removenode', ...

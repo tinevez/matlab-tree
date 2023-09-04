@@ -21,13 +21,13 @@ classdef tree
 % Jean-Yves Tinevez <tinevez@pasteur.fr> March 2012
     
     properties (SetAccess = private)
-        % Hold the data at each node
-        Node = { [] };
-        
         % Index of the parent node. The root of the tree as a parent index
         % equal to 0.
         Parent = [ 0 ]; %#ok<NBRAK>
-        
+    end
+    
+    properties (SetAccess = public)
+        Node = { [] }; % Hold the data at each node
     end
     
     methods
@@ -134,11 +134,25 @@ classdef tree
            
         end
         
-        function IDs = findleaves(obj)
+        function IDs = findleaves(obj,inBranch)
            %% FINDLEAVES  Return the IDs of all the leaves of the tree.
+           %% if inBranch is a node index, then return only the leaves that include this node
+           if nargin<2
+                inBranch=[];
+            end
            parents = obj.Parent;
            IDs = (1 : numel(parents)); % All IDs
            IDs = setdiff(IDs, parents); % Remove those which are marked as parent
+
+           if ~isempty(inBranch)
+            for ii=length(IDs):-1:1
+                thisPath=obj.pathtoroot(IDs(ii));
+                f=find(thisPath==inBranch);
+                if isempty(f)
+                    IDs(ii)=[];
+                end
+            end
+           end
            
         end
         
