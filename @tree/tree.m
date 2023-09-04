@@ -171,9 +171,9 @@ classdef tree
         end
         
         function IDs = getsiblings(obj, ID)
-            %% GETSIBLINGS  Return the list of ID of the sliblings of the 
+            %% GETSIBLINGS  Return the list of ID of the siblings of the 
             % given node ID, including itself.
-            % The list is returned as a column vector.
+            % The list is returned as a row vector.
             if ID < 1 || ID > numel(obj.Parent)
                 error('MATLAB:tree:getsiblings', ...
                     'No node with ID %d.', ID)
