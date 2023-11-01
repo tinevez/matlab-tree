@@ -12,6 +12,7 @@ function I = find(obj, varargin)
 %   I = FIND(T,K,'last') returns at most the last K indices corresponding 
 %   to the nonzero entries of the tree T.
 %
+    obj.Node(cellfun(@isempty, obj.Node)) = {false};
     val = [ obj.Node{:} ] ;
     I = find(val, varargin{:});
 end
